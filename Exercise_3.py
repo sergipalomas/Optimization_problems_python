@@ -13,7 +13,7 @@ Created on Mon Mar  5 10:59:49 2018
 from scipy.optimize import minimize
 import numpy as np
 
-print ('\nSOLVING USING SCIPY\n')
+print('\nSOLVING USING SCIPY\n')
 
 # Jacobian
 def fun_Jac(x):
@@ -42,39 +42,37 @@ bnds = ((None, None), (None, None))
 bnds = ((None, None), )*2
 
 # initial guess
-x0=(10,10)
+x0 = (10, 10)
 
 # Method SLSQP uses Sequential Least SQuares Programming to minimize a function 
 # of several variables with any combination of bounds, equality and inequality constraints. 
 
 res = minimize(fun, x0, method='SLSQP', bounds=bnds, constraints=cons)
-print (res)
-print ("optimal value p*", res.fun)
-print ("optimal var: x1 = ", res.x[0], " x2 = ", res.x[1])
+print(res)
+print("optimal value p*", res.fun)
+print("optimal var: x1 = ", res.x[0], " x2 = ", res.x[1])
 
 res2 = minimize(fun, x0, method='SLSQP', bounds=bnds, constraints=cons,jac=fun_Jac)
-print ('\n',res2)
-print ("JAC: optimal value p*", res2.fun)
-print ("JAC: optimal var: x1 = ", res2.x[0], " x2 = ", res2.x[1])
+print('\n',res2)
+print("JAC: optimal value p*", res2.fun)
+print("JAC: optimal var: x1 = ", res2.x[0], " x2 = ", res2.x[1])
 
 #print 'C1',res2.x[0]**2+res2.x[1]**2+res2.x[0]*res2.x[1],'C2',3*res2.x[0]+2*res2.x[1]
 
 res3 = minimize(fun, x0,  bounds=bnds, constraints=cons,jac=fun_Jac,hess=fun_Hess)
-print ('\n',res3)
-print ("JAC+HESS: optimal value p*", res3.fun)
-print ("JAC*HESS: optimal var: x1 = ", res3.x[0], " x2 = ", res3.x[1])
+print('\n',res3)
+print("JAC+HESS: optimal value p*", res3.fun)
+print("JAC*HESS: optimal var: x1 = ", res3.x[0], " x2 = ", res3.x[1])
 
 
 #%%
-import cvxopt
-from cvxopt.modeling import variable
-
+from cvxpy import *
 import numpy as np
 
-print ('\n SOLVING USING CVXPY\n')
+print('\n SOLVING USING CVXPY\n')
 
 # Create two scalar optimization variables.
-x = variable(2, name='x')
+x = Variable(2, name='x')
 
 # Constraints
 P1 = np.array(np.mat('1. 0.5; 0.5 1.'))
@@ -86,6 +84,7 @@ constraints = [f1 <= 3., f2 >= 3.]
 P0 = np.array(np.mat('1. 0.; 0. 1.'))
 f0 = quad_form(x, P0)
 obj = Minimize(f0)
+
 
 # Form and solve problem.
 prob = Problem(obj, constraints)
