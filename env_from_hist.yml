@@ -1,0 +1,11 @@
+name: TOML_exercises
+channels:
+  - defaults
+dependencies:
+  - python=3.7
+  - numpy
+  - matplotlib
+  - scipy
+  - cvxopt
+  - jupyterlab
+prefix: /home/sergi/anaconda3/envs/TOML_exercises
