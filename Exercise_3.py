@@ -39,7 +39,6 @@ cons = ({'type': 'ineq', 'fun': lambda x: -x[0]**2 - x[0]*x[1] - x[1]**2 + 3},
 
 # bounds, if any, e.g. x1 and x2 have to be possitive
 bnds = ((None, None), (None, None))
-bnds = ((None, None), )*2
 
 # initial guess
 x0 = (10, 10)
@@ -52,15 +51,15 @@ print(res)
 print("optimal value p*", res.fun)
 print("optimal var: x1 = ", res.x[0], " x2 = ", res.x[1])
 
-res2 = minimize(fun, x0, method='SLSQP', bounds=bnds, constraints=cons,jac=fun_Jac)
+res2 = minimize(fun, x0, method='SLSQP', bounds=bnds, constraints=cons, jac=fun_Jac)
 print('\n',res2)
 print("JAC: optimal value p*", res2.fun)
 print("JAC: optimal var: x1 = ", res2.x[0], " x2 = ", res2.x[1])
 
 #print 'C1',res2.x[0]**2+res2.x[1]**2+res2.x[0]*res2.x[1],'C2',3*res2.x[0]+2*res2.x[1]
 
-res3 = minimize(fun, x0,  bounds=bnds, constraints=cons,jac=fun_Jac,hess=fun_Hess)
-print('\n',res3)
+res3 = minimize(fun, x0,  bounds=bnds, constraints=cons, jac=fun_Jac, hess=fun_Hess)
+print('\n', res3)
 print("JAC+HESS: optimal value p*", res3.fun)
 print("JAC*HESS: optimal var: x1 = ", res3.x[0], " x2 = ", res3.x[1])
 
@@ -85,12 +84,11 @@ P0 = np.array(np.mat('1. 0.; 0. 1.'))
 f0 = quad_form(x, P0)
 obj = Minimize(f0)
 
-
 # Form and solve problem.
 prob = Problem(obj, constraints)
-print ("solve", prob.solve())  # Returns the optimal value.
-print ("status:", prob.status)
-print ("optimal value p* = ", prob.value)
-print ("optimal var: x1 = ", x[0].value, " x2 = ", x[1].value)
-print ("optimal dual variables lanbda1 = ", constraints[0].dual_value)
-print ("optimal dual variables lanbda2 = ", constraints[1].dual_value)
+print("solve", prob.solve())  # Returns the optimal value.
+print("status:", prob.status)
+print("optimal value p* = ", prob.value)
+print("optimal var: x1 = ", x[0].value, " x2 = ", x[1].value)
+print("optimal dual variables lanbda1 = ", constraints[0].dual_value)
+print("optimal dual variables lanbda2 = ", constraints[1].dual_value)
