@@ -9,7 +9,7 @@ def cost(x):
 gradient_cost = grad(cost)
 jacobian_cost = jacobian(cost)
 
-gradient_cost(x)
-jacobian_cost(np.array([x, x, x]))
+print(gradient_cost(x))
+print(jacobian_cost(np.array([x, x, x])))
 
 print("Ciao")

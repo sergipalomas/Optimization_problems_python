@@ -1,9 +1,9 @@
 from scipy.optimize import minimize
-from autograd import grad, jacobian
-import numpy as np
 import matplotlib.pyplot as plt
-import math
+from math import e
 import time
+import autograd.numpy as np
+from autograd import grad, jacobian, hessian, elementwise_grad
 
 
 print("Solving Exercise 1\n")
@@ -12,7 +12,7 @@ print("Solving Exercise 1\n")
 def obj_f(x):
     x1 = x[0]
     x2 = x[1]
-    return math.exp(x1) * (4*x1**2 + 2*x2**2 + 4*x1*x2 + 2*x2 + 1)
+    return e**(x1) * (4*x1**2 + 2*x2**2 + 4*x1*x2 + 2*x2 + 1)
 
 # constraint functions
 def ineq_constraint1(x):
@@ -24,6 +24,27 @@ def ineq_constraint2(x):
     x1 = x[0]
     x2 = x[1]
     return -x1*x2 + 10
+
+
+# CHECK CONVEXITY
+
+# Plot cost function domain
+x1 = np.linspace(10, 20, 30)
+x2 = np.linspace(10, 20, 30)
+exp = lambda t: e**(t)
+k = np.array([exp(xi) for xi in x1])
+y = k*(4*x1**2 + 2*x2**2 + 4*x1*x2 + 2*x2 + 1)
+fig = plt.figure()
+ax = fig.add_subplot(projection='3d', xlabel='x1', ylabel='x2', zlabel='cost_func')
+ax.plot(x1, x2, y)
+plt.show()
+
+# Hessian matrix
+x_values = np.array([0., 0.], dtype=float)
+grad_cost = grad(obj_f)
+print(grad_cost(x_values))
+H_f = jacobian(elementwise_grad(obj_f))
+print("Hessian: \n", H_f(x_values))
 
 # Bounds
 bounds_x1 = (None, None)
@@ -72,9 +93,8 @@ constraint = [constraint1, constraint2]
 
 #obj_f_d = lambda x: np.array([(2*(2*x[0]*(x[0] + x[1] + 2) + x[1]*(x[1] + 3)) + 1)*math.exp(x[0]),
 #                              math.exp(x[0])*(4*x[0] + 4*x[1] + 2)])
-obj_f_d = jacobian(obj_f)
-
-res = minimize(obj_f, ig, method='SLSQP', bounds=bound, jac=obj_f_d, constraints=constraint, options={'disp': True})
+J_f = jacobian(obj_f)
+res = minimize(obj_f, ig, method='SLSQP', bounds=bound, jac=J_f, constraints=constraint, options={'disp': True})
 print("optimal var: x1 = ", res.x[0], " x2 = ", res.x[1])
 print("Time to convergence: ", end_t - start_t)
 print("\n-----------------------\n\n")
