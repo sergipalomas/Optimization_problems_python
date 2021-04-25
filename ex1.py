@@ -3,9 +3,7 @@ import matplotlib.pyplot as plt
 from math import e
 import time
 import autograd.numpy as np
-from scipy.interpolate import make_interp_spline
-from autograd import grad, jacobian, hessian, elementwise_grad
-
+from autograd import grad, jacobian, elementwise_grad
 
 print("Solving Exercise 1\n")
 
@@ -34,6 +32,15 @@ def ineq_constraint2(x):
     x2 = x[1]
     return x1*x2 + 10
 
+def callbackF(Xi):
+    global Nfeval, iterations, intermediate_values
+    if (round(Xi[0] * Xi[1] - Xi[0] - Xi[1], 4) <= -1.5) and (round(-Xi[0] * Xi[1], 4) <= 10):
+        feasible = True
+    else: feasible = False
+    print('{0:4d}   {1: 3.6f}   {2: 3.6f}   {3: 3.6f}    {4: 1d}'.format(Nfeval, Xi[0], Xi[1], obj_f(Xi), feasible))
+    iterations.append(Nfeval)
+    intermediate_values.append(obj_f(Xi))
+    Nfeval += 1
 
 # CHECK CONVEXITY
 
@@ -70,16 +77,6 @@ constraint2 = {'type': 'ineq', 'fun': ineq_constraint2}
 
 constraint = [constraint1, constraint2]
 
-def callbackF(Xi):
-    global Nfeval, iterations, intermediate_values
-    if (round(Xi[0] * Xi[1] - Xi[0] - Xi[1], 4) <= -1.5) and (round(-Xi[0] * Xi[1], 4) <= 10):
-        feasible = True
-    else: feasible = False
-    print('{0:4d}   {1: 3.6f}   {2: 3.6f}   {3: 3.6f}    {4: 1d}'.format(Nfeval, Xi[0], Xi[1], obj_f(Xi), feasible))
-    iterations.append(Nfeval)
-    intermediate_values.append(obj_f(Xi))
-    Nfeval += 1
-
 for x0 in ([10, 20], [-10, 1], [-30, -30.], [0, 0]):
     Nfeval = 1
     iterations = list()
@@ -87,7 +84,7 @@ for x0 in ([10, 20], [-10, 1], [-30, -30.], [0, 0]):
     print("Inigial guess is:", x0)
     print("Constraint 1: ", round(x0[0]*x0[1] - x0[0] - x0[1], 4), " <= -1.5")
     print("Constraint 2.", round(-x0[0]*x0[1], 4), "<= 10")
-    if ( round(x0[0]*x0[1] - x0[0] - x0[1], 4) <= -1.5) and (round(-x0[0]*x0[1], 4) <= 10):
+    if (round(x0[0]*x0[1] - x0[0] - x0[1], 4) <= -1.5) and (round(-x0[0]*x0[1], 4) <= 10):
         print("Constraints satisfied in Initial Guess")
     else: print("Initial Guess is not feasible!")
     print('{0:4s}   {1:9s}   {2:9s}   {3:9s}    {4:5s}'.format('Iter', ' X1', ' X2', 'f(X)', 'Feasible'))
