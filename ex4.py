@@ -1,4 +1,5 @@
 from cvxpy import *
+import time
 import numpy as np
 
 
@@ -17,7 +18,9 @@ constraints = [
 
 # Form and solve problem.
 prob = Problem(obj, constraints)
-print("solve", prob.solve())  # Returns the optimal value.
+ts = time.time()
+prob.solve()  # Returns the optimal value.
+print("time to converge (s) = ", time.time() - ts)
 print("status:", prob.status)
 print("optimal value p* = ", prob.value)
 print("optimal var: x1 = ", x.value)

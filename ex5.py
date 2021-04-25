@@ -1,8 +1,9 @@
 from cvxpy import *
+import time
 import numpy as np
 
 
-print('\n Solving exercise 4\n')
+print('\n Solving exercise 5\n')
 
 # Create two scalar optimization variables.
 x = Variable()
@@ -16,7 +17,9 @@ constraints = [
 
 # Form and solve problem.
 prob = Problem(obj, constraints)
-print("solve", prob.solve())  # Returns the optimal value.
+ts = time.time()
+prob.solve()  # Returns the optimal value.
+print("Time to converge = ", time.time() - ts)
 print("status:", prob.status)
 print("optimal value p* = ", prob.value)
 print("optimal var: x1 = ", x.value, " x2 = ", y.value)
