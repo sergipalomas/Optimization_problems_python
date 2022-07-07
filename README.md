@@ -1,4 +1,4 @@
-# TOML_exercises
+# Optimization_problems_python
 
 Some Constraint Optimization Problems (COP) solved in Python (SLSQP from scipy and CVX toolbox).
 
